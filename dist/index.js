@@ -537,7 +537,7 @@ async function run() {
 
       console.log(`Making a pull request for ${branch} from ${sourceRepo}:${sourceBranch}.`);
       
-      const newBranch = `${branch}-catchup-${sha}`;
+      const newBranch = `${branch}-catchup-${sha.splice(0,7)}`;
       await createBranch(octokit, repo, sha, newBranch);
 
       const currentPull = currentPulls.find((pull) => {
