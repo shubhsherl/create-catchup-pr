@@ -10,6 +10,10 @@ To work properly delete created branches after merging them.
 
 **Required** The token to be used for creating the pull request. Can be set to the one given for the workflow or another user.
 
+### `GITHUB_REPO`
+
+**Required** Github repo with owner name. `${{ github.repository }}`
+
 ### `SOURCE_BRANCH`
 
 **Required** The branch you want to make the pull request from.
@@ -56,7 +60,7 @@ on:
 jobs:
   sync-branches:
     runs-on: ubuntu-latest
-    name: Syncing branches
+    name: Catching up branches
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -65,9 +69,10 @@ jobs:
         with:
           node-version: 12
       - name: Create Catchup PR
-        uses: shubhsherl/create-catchup-pr@0.1.0
+        uses: shubhsherl/create-catchup-pr@v0.0.1
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_REPO: ${{github.repository}}
           SOURCE_REPO: "octocat"
           SOURCE_BRANCH: "master"
           TARGET_BRANCH: "develop,experiment"

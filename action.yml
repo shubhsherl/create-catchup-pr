@@ -8,6 +8,9 @@ inputs:
   GITHUB_TOKEN:
     description: "User token to be associated with this pull request."
     required: true
+  GITHUB_REPO:
+    description: "Github owner name and repository ex: shubhsherl/repo"
+    required: true
   SOURCE_BRANCH:
     description: "Branch from make pull-request from"
     required: true

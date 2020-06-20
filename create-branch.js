@@ -1,7 +1,7 @@
-async function createBranch(octokit, context, sha, branch) {
+async function createBranch(octokit, repo, sha, branch) {
   try {
     await octokit.repos.getBranch({
-      ...context.repo,
+      ...repo,
       branch,
     });
   } catch (error) {
@@ -9,7 +9,7 @@ async function createBranch(octokit, context, sha, branch) {
       await octokit.git.createRef({
         ref: `refs/heads/${branch}`,
         sha: sha,
-        ...context.repo,
+        ...repo,
       });
     } else {
       console.log("Error while creating new branch");

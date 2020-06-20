@@ -509,6 +509,7 @@ const createBranch = __webpack_require__(503);
 async function run() {
   try {
     const sourceBranch = core.getInput("SOURCE_BRANCH", { required: true });
+    const githubRepo = core.getInput("GITHUB_REPO", { required: true });
     let sourceRepo = core.getInput("SOURCE_REPO", { required: false });
     const targetBranches = core.getInput("TARGET_BRANCH", { required: true });
     const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
@@ -517,23 +518,18 @@ async function run() {
     const draft = core.getInput("DRAFT", { required: false });
 
     const targetBranchesArray = targetBranches.split(",");
-
-    const { payload: { repository } } = github.context;
+    const repo = { repo: githubRepo.split("/")[1], owner: githubRepo.split("/")[0] };
 
     const octokit = new github.GitHub(githubToken);
 
-    const { data: currentPulls } = await octokit.pulls.list({
-      owner: repository.owner.login,
-      repo: repository.name,
-    });
+    const { data: currentPulls } = await octokit.pulls.list(repo);
 
     if (!sourceRepo) {
-      sourceRepo = repository.owner.login;
+      sourceRepo = repo.owner;
     }
 
     const { data: { commit: { sha } } } = await octokit.repos.getBranch({
-      owner: sourceRepo,
-      repo: repository.name,
+      ...repo,
       branch: sourceBranch,
     })
 
@@ -542,7 +538,7 @@ async function run() {
       console.log(`Making a pull request for ${branch} from ${sourceRepo}:${sourceBranch}.`);
       
       const newBranch = `${branch}-catchup-${sha}`;
-      await createBranch(octokit, github.context, sha, newBranch);
+      await createBranch(octokit, repo, sha, newBranch);
 
       const currentPull = currentPulls.find((pull) => {
         return pull.head.ref === newBranch && pull.base.ref === branch;
@@ -550,8 +546,7 @@ async function run() {
 
       if (!currentPull) {
         const { data: pullRequest } = await octokit.pulls.create({
-          owner: repository.owner.login,
-          repo: repository.name,
+          ...repo,
           head: newBranch,
           base: branch,
           title: title || `[Catchup]: Merge ${sourceRepo}:${sourceBranch} to ${branch}`,
@@ -7534,10 +7529,10 @@ exports.RequestError = RequestError;
 /***/ 503:
 /***/ (function(module) {
 
-async function createBranch(octokit, context, sha, branch) {
+async function createBranch(octokit, repo, sha, branch) {
   try {
     await octokit.repos.getBranch({
-      ...context.repo,
+      ...repo,
       branch,
     });
   } catch (error) {
@@ -7545,7 +7540,7 @@ async function createBranch(octokit, context, sha, branch) {
       await octokit.git.createRef({
         ref: `refs/heads/${branch}`,
         sha: sha,
-        ...context.repo,
+        ...repo,
       });
     } else {
       console.log("Error while creating new branch");
