@@ -529,7 +529,8 @@ async function run() {
     }
 
     const { data: { commit: { sha } } } = await octokit.repos.getBranch({
-      ...repo,
+      owner: sourceRepo,
+      repo: repo.repo,
       branch: sourceBranch,
     })
 
