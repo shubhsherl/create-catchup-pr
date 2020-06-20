@@ -69,7 +69,7 @@ jobs:
         with:
           node-version: 12
       - name: Create Catchup PR
-        uses: shubhsherl/create-catchup-pr@v0.0.3
+        uses: shubhsherl/create-catchup-pr@v0.1.0
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           GITHUB_REPO: ${{github.repository}}

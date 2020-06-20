@@ -1,6 +1,6 @@
 {
   "name": "create-catchup-pr",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Action to sync target branches with source branches across forks",
   "main": "index.js",
   "author": "<shubham.singh094@yahoo.com>",
