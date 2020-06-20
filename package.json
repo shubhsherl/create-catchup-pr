@@ -1,0 +1,24 @@
+{
+  "name": "create-catchup-pr",
+  "version": "0.0.1",
+  "description": "Action to sync target branches with source branches across forks",
+  "main": "index.js",
+  "author": "<shubham.singh094@yahoo.com>",
+  "license": "MIT",
+  "keywords": [
+    "GitHub",
+    "Actions",
+    "JavaScript"
+  ],
+  "scripts": {
+    "build": "ncc build index.js -o dist"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.4",
+    "@actions/github": "^2.1.0"
+  },
+  "devDependencies": {
+    "@zeit/ncc": "^0.22.1",
+    "jest": "^25.5.4"
+  }
+}

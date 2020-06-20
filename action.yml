@@ -1,0 +1,37 @@
+name: "Create Catchup PR"
+author: Shubham Singh <shubham.singh094@yahoo.com>
+description: "Github Action to create PR for syncing multiple branches from different forks"
+branding:
+  icon: git-pull-request
+  color: green
+inputs:
+  GITHUB_TOKEN:
+    description: "User token to be associated with this pull request."
+    required: true
+  SOURCE_BRANCH:
+    description: "Branch from make pull-request from"
+    required: true
+  TARGET_BRANCH:
+    description: "Branch to make the pull-request against"
+    required: true
+  SOURCE_REPO:
+    description: "Repo to make the pull-request from"
+    required: false
+  TITLE:
+    description: "Title of Pull request"
+    required: false
+  BODY:
+    description: "Body of the pull request"
+    required: false
+  DRAFT:
+    description: "Create draft pull request"
+    required: false
+    default: "false"
+outputs:
+  PULL_REQUEST_URL:
+    description: "URL for either the generated pull request or the currently open one"
+  PULL_REQUEST_NUMBER:
+    description: "Pull request number from generated pull request or the currently open one"
+runs:
+  using: "node12"
+  main: "dist/index.js"
